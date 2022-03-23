@@ -1,9 +1,5 @@
-Template for the Read the Docs tutorial
-=======================================
+Smart Chart Suite Documentation
+===============================
 
-This GitHub template includes fictional Python library
-with some basic Sphinx docs.
-
-Read the tutorial here:
-
-https://docs.readthedocs.io/en/stable/tutorial/
+This repository is a collection of documentation built through ReadTheDocs.org.
+You may find the published documentation at [https://smartchartsuitedocs.readthedocs.io/en/latest/]

@@ -1,5 +1,5 @@
-Usage
-=====
+Author Guide
+============
 
 .. _installation:
 
