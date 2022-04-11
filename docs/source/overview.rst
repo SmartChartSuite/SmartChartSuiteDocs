@@ -1,7 +1,7 @@
 Overview
 ========
 
-.. autosummary::
-   :toctree: generated
-
-   lumache
+.. toctree::
+   overview/background
+   overview/architecture
+   overview/components

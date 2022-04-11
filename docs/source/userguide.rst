@@ -1,7 +1,6 @@
 User Guide
 ==========
 
-.. autosummary::
-   :toctree: generated
-
-   lumache
+.. toctree::
+   user-guide/usingregviewer
+   user-guide/usingsmartchart
