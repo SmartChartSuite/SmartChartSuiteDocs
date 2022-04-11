@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'SmartChart Suite'
+copyright = '2022, GTRI'
+author = 'GTRI'
 
 release = '0.1'
 version = '0.1.0'
