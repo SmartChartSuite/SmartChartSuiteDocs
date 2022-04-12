@@ -1,0 +1,25 @@
+.wy-nav-content {
+    max-width: 1500px !important;
+}
+
+.tight-table td {
+    white-space: normal !important;
+}
+
+
+/* Sidebar header (and topbar for mobile) */
+
+.wy-side-nav-search,
+.wy-nav-top {
+    background: #79589F;
+}
+
+
+/* Sidebar */
+
+
+/*
+.wy-nav-side {
+    background: #ff0000;
+}
+*/
