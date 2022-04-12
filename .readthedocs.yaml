@@ -11,7 +11,7 @@ build:
   tools:
     python: "3.9"
   jobs:
-    pre_build:
+    post_checkout:
       - echo "Deleting _build cache"
       - rm -rf /home/docs/checkouts/readthedocs.org/user_builds/smartchartsuitedocs/checkouts/latest/docs/source/_build/_html/
 
