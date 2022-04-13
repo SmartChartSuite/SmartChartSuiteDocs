@@ -86,7 +86,7 @@ See :ref:`authoring-job-packages` for this information.
 Libraries
 ---------
 
-A major purpose of the design of the RC-API specification is to leverage multiple decision support/analytics languages via a common interface. `HL7 Clinical Quality Language (CQL) <https://cql.hl7.org/>`_` is supported natively by the embedded CQF Ruler server, with additional support for `Natural Language Processing Query Language (NLPQL) <https://claritynlp.readthedocs.io/en/latest/nlpql_reference/index.html>`_` when coupled with `ClarityNLP <https://claritynlp.readthedocs.io/en/latest/>`_.
+A major purpose of the design of the RC-API specification is to leverage multiple decision support/analytics languages via a common interface. `HL7 Clinical Quality Language (CQL) <https://cql.hl7.org/>`_ is supported natively by the embedded CQF Ruler server, with additional support for `Natural Language Processing Query Language (NLPQL) <https://claritynlp.readthedocs.io/en/latest/nlpql_reference/index.html>`_ when coupled with `ClarityNLP <https://claritynlp.readthedocs.io/en/latest/>`_.
 
 CQL or NLPQL scripts are stored in `FHIR Library resources <https://www.hl7.org/fhir/library.html>`_ as a binary. The following shows an example of this using an example Library.
 
@@ -123,18 +123,117 @@ Library resources should be version controlled to ensure that there is not a bre
 Result Bundles and Answer Observations
 --------------------------------------
 
+As previously mentioned, RC-API returns results in a  Result Bundle. The Result Bundle is a FHIR-conformant Bundle with type collection that contains the "answers" to "questions" represented as Answer Observations. Along with the Answer Observations are the supporting FHIR resources that lead to the creation of the Answer Observations.
+
+.. note::
+  Supporting resources are created using information returned via the analytics services (e.g. CQL and NLPQL evaluation). This means that the information contained in these resources are limited by what information is returned via the analytics services, and may not be the complete FHIR resource found on the original FHIR server. The supporting resources do contain the original resource ID and a custom identifier to indicate that they were created by RC-API
+
 Answer Observations
 ^^^^^^^^^^^^^^^^^^^
 
+A typical "simple" Answer Observation is shown below. This "simple" Answer Observation contains a single return value that would not have any associated FHIR Resources with it, this example being finding the Patient's gender. This Answer Observation contains:
+
+* A generated UUID in ``Observation.id``
+* A ``status`` of ``final``
+* A ``category`` of ``survey``
+* A ``code`` with the question concept defined in the jobPackage
+* A ``subject`` with a reference to the Patient
+* An ``effectiveDateTime`` where in this case, is going to the current datetime
+* A ``valueString`` with the "answer" to the "question"
+
 .. code-block:: json
+   :caption: Example "Simple" Answer Observation
 
    {
-      "resourceType": "Observation"
+        "resourceType": "Observation",
+        "id": "fd1c7e32-ff07-4bc8-86cc-df94ca18d55c",
+        "status": "final",
+        "category": [
+            {
+                "coding": [
+                    {
+                        "code": "survey",
+                        "display": "Survey",
+                        "system": "http://terminology.hl7.org/CodeSystem/observation-category"
+                    }
+                ]
+            }
+        ],
+        "code": {
+            "coding": [
+                {
+                    "code": "2000000005",
+                    "system": "urn:gtri:heat:form:SyphilisRegistry"
+                }
+            ]
+        },
+        "effectiveDateTime": "2022-04-11T14:53:42.381162",
+        "subject": {
+            "reference": "Patient/46529"
+        },
+        "valueString": "male"
    }
 
 
+An example of a more "complex" and typical Answer Observation is shown below. This Answer Observation contains an "answer" to a "question" that contains supporting resources. The most notable difference is the inclusion of the ``focus`` and ``note`` fields, and the ``valueString`` being caret-delimited. This Answer Observation contains the following:
+
+* A generated UUID in ``Observation.id``
+* A ``status`` of ``final``
+* A ``category`` of ``survey``
+* A ``code`` with the question concept defined in the jobPackage
+* An ``effectiveDateTime`` where it's pulled from the supporting resource
+* A ``subject`` with a reference to the Patient
+* A ``focus`` to any supporting resources that are also included in the Result Bundle
+* A ``note`` field that contains the sourceNote from the Tuples defined in the CQL or NLPQL
+* A ``valueString`` with the "answer" to the "question" (in a caret delimited format which is explained in :ref:`value-in-valuestring`)
+
+.. code-block:: json
+  :caption: Example "Complex" Answer Observation
+
+   {
+       "resourceType": "Observation",
+       "id": "c9b14163-f8f2-4535-b5d1-19ea233ce575",
+       "status": "final",
+       "category": [
+           {
+               "coding": [
+                   {
+                       "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                       "code": "survey",
+                       "display": "Survey"
+                   }
+               ]
+           }
+       ],
+       "code": {
+           "coding": [
+               {
+                   "system": "urn:gtri:heat:form:SyphilisRegistry",
+                   "code": "2000000008"
+               }
+           ]
+       },
+       "effectiveDateTime": "2022-01-14T00:00:00",
+       "subject": {
+           "reference": "Patient/46529"
+       },
+       "focus": [
+           {
+               "reference": "Observation/31045347"
+           }
+       ],
+       "note": [
+           {
+               "text": "2022-01-14T00:00:00^http://loinc.org^20507-0^Reagin Ab [Presence] in Serum by RPR^Reactive"
+           }
+       ],
+       "valueString": "2022-01-14T00:00:00^http://loinc.org^20507-0^Reagin Ab [Presence] in Serum by RPR^Reactive"
+   }
+
+.. _value-in-valuestring:
+
 Value in Observation.valueString
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Structured Data Source (i.e. CQL)
 """""""""""""""""""""""""""""""""

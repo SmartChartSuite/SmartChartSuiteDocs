@@ -1,7 +1,6 @@
 Knowledge-base Repository Configuration
 =======================================
 
-
 Getting Started
 ---------------
 
@@ -13,15 +12,19 @@ The on startup integration is configured via environment variables in RC-API, wh
 
 Please note that the instructions provided here are for a "generic" approach to configuring knowledge integration, and cannot account for all potential environments' security needs.
 
-### Requirements
+Requirements
+^^^^^^^^^^^^
 
 * A GitHub Repository
 * RC-API
 
 In addition to the above, you must have a way to generate (and potentially manage) SSH keys for RC-API if you intend to use a private or enterprise GitHub repository. (Public repositories do not require a key pair.)
 
-### RC-API Configuration Options
+RC-API Configuration Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 The two parts of the loading, on startup and through continuous updates, are distinct areas of configuration. Users may choose one or both. This leaves four distinct knowledgebase integration configurations, as follows:
+
 * No integration.
 * Partial Integration - Startup Only
 * Partial Integration - Webhook Only
@@ -33,7 +36,7 @@ Users should weigh their needs and security concerns with both approaches.
 Startup Event Configuration
 ---------------------------
 
-To load all CQL and NLPQL files from the knowledgebase repository on startup, the following environment variable must be set: `knowledgebase_repo_url`. This should be the clone URL for the repository. It may be either in HTTPS or SSH such as "https://github.com/someorganization/cql-nlpql-knowledgebase.git" or "git@github.com:someorganization/cql-nlpql-knowledgebase.git".
+To load all CQL and NLPQL files from the knowledgebase repository on startup, the following environment variable must be set: ``knowledgebase_repo_url``. This should be the clone URL for the repository. It may be either in HTTPS or SSH such as "https://github.com/someorganization/cql-nlpql-knowledgebase.git" or "git@github.com:someorganization/cql-nlpql-knowledgebase.git".
 
 For public repositories, this is all that is required. For private repositories, see the appropriate section below.
 
@@ -67,7 +70,8 @@ When connecting to a private repository, regardless of which integrations you ha
 
 For the private key, this will depend heavily on your environment and cannot be fully accounted for here. For an insecure option for the sake of testing, continue on to the bottom of this section. This top portion will explain configuration of the GitHub repository's Deploy Key.
 
-### Setting up a Deploy Key
+Setting up a Deploy Key
+^^^^^^^^^^^^^^^^^^^^^^^
 
 In the Knowledgebase repository settings, just below the webhook menu option, you will see "Deploy keys". Selecting this will have a screen very similar to the webhook one.
 
@@ -81,17 +85,17 @@ In this screen, give your deploy key a title such as "RC-API" to identify it, an
 
 This configures your deploy key, so that an application with the matching private key may access the repository to perform read (clone) functions needed to pull the contents.
 
-### Insecure Testing Option
+Insecure Testing Option
+^^^^^^^^^^^^^^^^^^^^^^^
 
 **WARNING!!** An insecure option for the sake of testing is provided here, but this *should not* be used with production environments, public repositories, or in any case where key security is important. The user assumes all risks for taking this approach.
 
-If you are running the RC-API docker deployment, the private key along with a known_hosts file may be copied directly into the container. To do so, add the following lines to the Dockerfile found in the RC-API repository's `/app` folder, immediately following the line that says `WORKDIR /app`.
+If you are running the RC-API docker deployment, the private key along with a known_hosts file may be copied directly into the container. To do so, add the following lines to the Dockerfile found in the RC-API repository's ``/app`` folder, immediately following the line that says ``WORKDIR /app``. ::
 
-```
-COPY ./ssh/id_rsa /root/.ssh/id_rsa
-COPY ./ssh/id_rsa.pub /root/.ssh/id_rsa.pub
-COPY ./ssh/known_hosts /root/.ssh/known_hosts
-RUN chmod 400 /root/.ssh/id_rsa
-```
 
-Then, still in the `/app` folder, create a new directory called `/ssh`. Follow instructions for your OS to generate a key pair(e.g. `ssh-keygen`), and place the resulting files in this folder along with a file called `known_hosts`. To this file you will need to add the proper key for the repository host, typically GitHub.com. If you are using an Enterprise GitHub, you will need to obtain the known host key for that. The keys will not be provided here.
+   COPY ./ssh/id_rsa /root/.ssh/id_rsa
+   COPY ./ssh/id_rsa.pub /root/.ssh/id_rsa.pub
+   COPY ./ssh/known_hosts /root/.ssh/known_hosts
+   RUN chmod 400 /root/.ssh/id_rsa
+
+Then, still in the ``/app`` folder, create a new directory called ``/ssh``. Follow instructions for your OS to generate a key pair (e.g. ``ssh-keygen``), and place the resulting files in this folder along with a file called ``known_hosts``. To this file you will need to add the proper key for the repository host, typically GitHub.com. If you are using an Enterprise GitHub, you will need to obtain the known host key for that. The keys will not be provided here.

@@ -59,25 +59,13 @@ Each of these cells maps to the Questionnaire resource as follows:
 -  Name → Questionnaire.title
 -  Name → Questionnaire.id, Questionnaire.url, and Questionnaire.name
 
-   -  While the FHIR resource ID is intended to be set by the server,
-      this placeholder ID is set to provide a means for a temporary
-      reference outside of a specific FHIR server, such as for
-      references in bundle transaction operations or providing a
-      definition resources. To ensure a machine readable string, all
-      characters other than A-Z, a-z, and 0-9 are stripped from the
-      string. E.g. “Demonstration Form” becomes “DemonstrationForm”.
-      Allowed regex: [a-zA-Z0-9]
-   -  For the same reasons, the ID is also populated in turn to the
-      canonical URL element (Questionnaire.url).
-   -  The Questionnaire.name field is also intended to be a machine
-      readable string, and so the same ID parsed version is set there.
+   -  While the FHIR resource ID is intended to be set by the server, this placeholder ID is set to provide a means for a temporary reference outside of a specific FHIR server, such as for references in bundle transaction operations or providing a definition resources. To ensure a machine readable string, all characters other than A-Z, a-z, and 0-9 are stripped from the string. E.g. “Demonstration Form” becomes “DemonstrationForm”. Allowed regex: [a-zA-Z0-9]
+   -  For the same reasons, the ID is also populated in turn to the canonical URL element (Questionnaire.url).
+   -  The Questionnaire.name field is also intended to be a machine readable string, and so the same ID parsed version is set there.
 
 -  Version → Questionnaire.version
 
-   -  By convention, the version should always be incremented for each
-      publication of the job package to CQF Ruler, as this is directly
-      tied to Questionnaire and FHIR Resource versioning. A versioning
-      plan should be considered during authoring.
+   -  By convention, the version should always be incremented for each publication of the job package to CQF Ruler, as this is directly tied to Questionnaire and FHIR Resource versioning. A versioning plan should be considered during authoring.
 
 -  Description → Questionnaire.description
 
