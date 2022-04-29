@@ -240,14 +240,17 @@ Structured Data Source (i.e. CQL)
 While the FHIR Observation value is capable of handling multiple data types, structured data for the output Bundle is collapsed into a single string in order to provide simple and fast access to the returned data in a common format. If the value (Observation.valueString) contains carets (^), it's considered structured in the following formats (each number in { } indicates the meaning of value.): ::
 
    Format 1: {1}^{2}^{3}
-   Format 2: {0}^{1}^{2}^{3}
+   Format 2: {0}^{1}^{2}^{3}^{4}
    Format 3: {0}^{1}^{2}^{3}^{4}^{5}
+   Format 4: {0}^{1}^{2}^{3}^{4}^{5}^{6}
+
    {0}: datetime (in ISO Date format)
    {1}: system
    {2}: code
    {3}: display
-   {4}: additional value
-   {5}: unit if {4} is numeric.
+   {4}: additional value (could be a string or decimal)
+   {5}: unit if {4} is numeric Quantity.
+   {6}: display if {4} is system and {5} is code (for a CodeableConcept)
 
 
 All {#} are optional. If any of them are empty or null, it should have no data, but the position should be intact. For example, if {1} is not available for the coded value (format 1), it should be "^{2}^{3}".
