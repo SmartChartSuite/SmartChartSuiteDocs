@@ -1,1 +1,1 @@
-myst_parser==0.17.0
+myst_parser==0.17.2
