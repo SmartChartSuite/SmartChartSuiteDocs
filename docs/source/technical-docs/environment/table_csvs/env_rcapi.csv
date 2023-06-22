@@ -1,0 +1,10 @@
+﻿Variable,Description,Example
+API_DOCS,,"""True"""
+CQF_RULER_R4,,https://dev.heat.icl.gtri.org/cqf-ruler-r4/fhir/
+DEPLOY_URL,,https://smartchartsuite.dev.heat.icl.gtri.org/rc-api/
+EXTERNAL_FHIR_SERVER_URL,,https://mimic3-v53-r4.dev.heat.icl.gtri.org/fhir/
+EXTERNAL_FHIR_SERVER_AUTH,,"""Bearer 12345"""
+INCLUDE_SCHEME,,"""True"""
+LOG_LEVEL,,DEBUG
+NLPAAS_URL,,http://nlpaas-lite:8080
+DOCS_PREPEND_URL,,/rc-api/
